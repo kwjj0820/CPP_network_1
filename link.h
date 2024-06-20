@@ -3,11 +3,18 @@
 
 #include "packet.h"
 #include <cstdlib>
+#include <iostream>
 
 class Node;
 
 class Link {
   friend class LinkInstaller;
+
+public:
+  Node* a() const { return nodeA_;}
+  Node* b() const { return nodeB_;}
+  void received(Packet* packet, Node* node);
+  ~Link() {}
 
 private:
   Link(Node *nodeA, Node *nodeB) : nodeA_(nodeA), nodeB_(nodeB) {}
@@ -20,5 +27,6 @@ private:
     return node == nodeA_ ? nodeB_ : nodeA_;
   }
 };
+
 
 #endif

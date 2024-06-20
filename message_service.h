@@ -15,12 +15,25 @@ private:
   Address destAddress_;
   // 목적지 포트
   short destPort_;
+
   MessageService(Host *host, short port, Address destAddress, short destPort)
       : Service(host, port), destAddress_(destAddress), destPort_(destPort) {}
 
 public:
+  ~MessageService() {}
   // 메시지를 전송한다
-  void send(std::string message);
+  void send(std::string message)
+  {
+    Packet* newPacket = new Packet(host_->address(), destAddress_, port_, destPort_, message);
+    host_->send(newPacket);
+    delete newPacket;
+  }
+
+  void doService(Packet* packet)
+  {
+    std::cout << "MessageService: received \"" << packet->dataString() <<\
+    "\" from " << packet->srcAddress().toString() << ":" << packet->srcPort() << std::endl;
+  }
 };
 
 #endif
